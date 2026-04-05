@@ -14,7 +14,10 @@ trait ConsumesExternalService
 
         $response = $client->request($method, $requestUrl, [
             'form_params' => $form_params,
-            'headers' => $headers
+            'headers' => array_merge([
+                'Authorization' => $this->secret,  
+                'Accept' => 'application/json',
+            ], $headers)
         ]);
 
         return $response->getBody()->getContents();
