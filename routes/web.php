@@ -3,9 +3,9 @@
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 
-$router->post('/login', 'AuthController@login');
+$router->post('/MovUser/login', 'AuthController@login');
 $router->post('/MovUser', 'MovieUserController@add');
-$router->post('/register', 'AuthController@register');
+$router->post('/MovUser/register', 'AuthController@register');
 
 $router->get('/test', function () {
     return 'Route working';
