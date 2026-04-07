@@ -2,33 +2,92 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Movie; 
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
-use App\Models\Movie;   
+use Illuminate\Http\Response;
 
 class MovieController extends Controller
-{
-    public function index(Request $request)
+{ 
+    /**
+     * Return all movies
+     */
+    public function index()
     {
-        $client = new Client();
-        $token = $request->header('Authorization');
+        return response()->json(Movie::all(), 200);
+    }
 
-        try {
-            $response = $client->get('https://site2-microservice.onrender.com/movie/', [
-                'headers' => [
-                    'Authorization' => $token,
-                    'Accept'        => 'application/json',
-                ]
-            ]);
+    /**
+     * Show a single movie. 
+     * If not found, returns 404 for Site 1's validation.
+     */
+    public function show($id)
+    {
+        $movie = Movie::find($id);
 
-            $data = json_decode($response->getBody()->getContents(), true);
-            return response()->json($data, 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Gateway could not reach Site 2',
-                'details' => $e->getMessage()
-            ], 502);
+        if (!$movie) {
+            return response()->json(['message' => 'Movie not found'], 404);
         }
+
+        return response()->json($movie, 200);
+    }
+
+    /**
+     * Create a new movie
+     */
+    public function add(Request $request)
+    {
+        $rules = [
+            'title' => 'required|string|max:100',
+            'genre' => 'required|string|max:50',
+        ];
+
+        $this->validate($request, $rules);
+
+        $movie = Movie::create($request->all());
+
+        return response()->json($movie, 201);
+    }
+
+    /**
+     * Update movie details
+     */
+    public function update(Request $request, $id)
+    {
+        $movie = Movie::find($id);
+
+        if (!$movie) {
+            return response()->json(['message' => 'Movie not found'], 404);
+        }
+
+        $rules = [
+            'title' => 'string|max:100',
+            'genre' => 'string|max:50',
+        ];
+
+        $this->validate($request, $rules);
+
+        $movie->fill($request->all());
+
+        if ($movie->isClean()) {
+            return response()->json(['message' => 'At least one value must change'], 422);
+        }
+
+        $movie->save();
+        return response()->json($movie, 200);
+    }
+
+    /**
+     * Delete a movie
+     */
+    public function delete($id)
+    {
+        $movie = Movie::find($id);
+
+        if (!$movie) {
+            return response()->json(['message' => 'Movie not found'], 404);
+        }
+
+        $movie->delete();
+        return response()->json(['message' => 'Movie deleted successfully'], 200);
     }
 }
