@@ -14,7 +14,7 @@ class MovieController extends Controller
         $token = $request->header('Authorization');
 
         try {
-            $response = $client->get('http://localhost:8001/movie', [
+            $response = $client->get('https://site2-microservice.onrender.com/movie', [
                 'headers' => [
                     'Authorization' => $token,
                     'Accept'        => 'application/json',

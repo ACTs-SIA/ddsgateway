@@ -30,7 +30,7 @@ class MovieUserController extends Controller
             $movie = null;
             try {
                 // 🕵️ ADDED: Passing the Authorization header to Site 2
-                $response = $client->get("http://localhost:8001/movie/" . $user->movie_id, [
+                $response = $client->get("https://site2-microservice.onrender.com/movie" . $user->movie_id, [
                     'headers' => ['Authorization' => $token]
                 ]);
                 $movie = json_decode($response->getBody()->getContents(), true);
@@ -62,7 +62,7 @@ class MovieUserController extends Controller
 
         try {
             // 🕵️ ADDED: Passing the token to verify the movie exists
-            $client->get("http://localhost:8001/movie/" . $request->movie_id, [
+            $client->get("https://site2-microservice.onrender.com/movie/" . $request->movie_id, [
                 'headers' => ['Authorization' => $token]
             ]);
         } catch (\Exception $e) {
@@ -87,7 +87,7 @@ class MovieUserController extends Controller
 
         try {
             // 🕵️ ADDED: Passing the token
-            $response = $client->get("http://localhost:8001/movie/" . $user->movie_id, [
+            $response = $client->get("https://site2-microservice.onrender.com/movie/" . $user->movie_id, [
                 'headers' => ['Authorization' => $token]
             ]);
             $movie = json_decode($response->getBody()->getContents(), true);
@@ -118,7 +118,7 @@ class MovieUserController extends Controller
 
         try {
             // 🕵️ ADDED: Passing the token
-            $client->get("http://localhost:8001/movie/" . $request->movie_id, [
+            $client->get("https://site2-microservice.onrender.com/movie/" . $request->movie_id, [
                 'headers' => ['Authorization' => $token]
             ]);
         } catch (\Exception $e) {
