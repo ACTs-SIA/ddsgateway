@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
-use App\Models\Movie;
+use App\Models\Movie;   
 
 class MovieController extends Controller
 {
@@ -14,7 +14,7 @@ class MovieController extends Controller
         $token = $request->header('Authorization');
 
         try {
-            $response = $client->get('https://site2-microservice.onrender.com/movie', [
+            $response = $client->get('https://site2-microservice.onrender.com/movie/', [
                 'headers' => [
                     'Authorization' => $token,
                     'Accept'        => 'application/json',

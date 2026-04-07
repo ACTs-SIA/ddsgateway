@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\MovUser;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
+
 
 class AuthController extends Controller
 {
@@ -40,7 +43,7 @@ class AuthController extends Controller
         }
 
         if (Hash::check($request->input('password'), $user->password)) {
-            $token = Auth::login($user); 
+            $token = JWTAuth::fromUser($user); 
             return $this->respondWithToken($token);
         }
 
@@ -52,7 +55,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => Auth::factory()->getTTL() * 60 
+            'expires_in' => 3600 
         ]);
     }
 }
